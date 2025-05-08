@@ -14,6 +14,11 @@ from langchain_core.tools import InjectedToolArg
 from typing_extensions import Annotated
 
 from react_agent.configuration import Configuration
+from composio_langgraph import Action, ComposioToolSet, App
+
+def get_tools() -> List[Callable[..., Any]]:
+    composio_toolset = ComposioToolSet()
+    return composio_toolset.get_tools(apps=[App.GMAIL])
 
 
 async def search(
@@ -31,4 +36,4 @@ async def search(
     return cast(list[dict[str, Any]], result)
 
 
-TOOLS: List[Callable[..., Any]] = [search]
+TOOLS: List[Callable[..., Any]] = [search, *get_tools()]
